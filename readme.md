@@ -58,7 +58,7 @@ This is a simple rate limiter library for PHP, providing two rate limiting algor
 ### Usage
 1. Install via Composer:
     ```bash
-    composer require myname/rate-limiter
+    composer require skyjerry/rate-limiter
     ```
 2. Use in your code:
     ```php
