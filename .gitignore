@@ -1,0 +1,12 @@
+# PHPStorm
+.idea/
+
+# PHPUnit
+.phpunit.result.cache
+package.xml
+
+# PHP Composer
+vendor/
+
+# mac
+.DS_Store
