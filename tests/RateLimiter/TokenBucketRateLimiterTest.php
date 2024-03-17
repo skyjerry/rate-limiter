@@ -2,24 +2,34 @@
 namespace RateLimiter\Tests;
 
 use PHPUnit\Framework\TestCase;
-use RateLimiter\TokenBucketRateLimiter;
-use RateLimiter\Storage\FileStorage;
+use RateLimiter\RateLimiterFactory;
+use RateLimiter\Storage\RedisStorage;
+use Redis;
 
 class TokenBucketRateLimiterTest extends TestCase
 {
-    private $storage;
     private $rateLimiter;
 
     public function setUp(): void
     {
-        $this->storage = new FileStorage(sys_get_temp_dir() . '/test_rate_limiter.data');
-        $this->rateLimiter = new TokenBucketRateLimiter($this->storage, 10, 5);
+        $this->rateLimiter = RateLimiterFactory::createRateLimiter(
+            'tokenBucket',
+            'redis',
+            [
+                'host' =>  '127.0.0.1',
+                'port' => 6379,
+            ],
+            10,
+            5
+        );
     }
 
     public function tearDown(): void
     {
         // 清理测试数据
-        $this->storage->clear();
+        $redisClient = new Redis();
+        $redisClient->connect('127.0.0.1', 6379);
+        (new RedisStorage($redisClient))->clear();
     }
 
     public function testAcquireWithinLimit()

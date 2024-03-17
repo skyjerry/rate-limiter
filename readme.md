@@ -22,11 +22,16 @@
     ```
 2. 在代码中使用:
     ```php
-    use RateLimiter\TokenBucketRateLimiter;
-    use RateLimiter\Storage\FileStorage;
-    
-    $storage = new FileStorage();
-    $rateLimiter = new TokenBucketRateLimiter($storage, 100, 60);
+    $storageConfig = [
+        'filePath' => sys_get_temp_dir() . '/test_rate_limiter.data',
+    ];
+    $rateLimiter = \RateLimiter\RateLimiterFactory::createRateLimiter(
+         'tokenBucket',
+         'file',
+         $storageConfig,
+         10,
+         1
+    );
     
     if (!$rateLimiter->acquire('user_1', 10)) {
         echo "限流了!";
@@ -62,11 +67,16 @@ This is a simple rate limiter library for PHP, providing two rate limiting algor
     ```
 2. Use in your code:
     ```php
-    use RateLimiter\TokenBucketRateLimiter;
-    use RateLimiter\Storage\FileStorage;
-    
-    $storage = new FileStorage();
-    $rateLimiter = new TokenBucketRateLimiter($storage, 100, 60);
+    $storageConfig = [
+        'filePath' => sys_get_temp_dir() . '/test_rate_limiter.data',
+    ];
+    $rateLimiter = \RateLimiter\RateLimiterFactory::createRateLimiter(
+         'tokenBucket',
+         'file',
+         $storageConfig,
+         10,
+         1
+    );
     
     if (!$rateLimiter->acquire('user_1', 10)) {
         echo "Rate limited!";

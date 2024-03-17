@@ -1,24 +1,34 @@
 <?php
+
 namespace RateLimiter\Tests;
 
 use PHPUnit\Framework\TestCase;
+use RateLimiter\RateLimiterFactory;
 use RateLimiter\SlidingWindowRateLimiter;
 use RateLimiter\Storage\FileStorage;
 
 class SlidingWindowRateLimiterTest extends TestCase
 {
-    private $storage;
     private $rateLimiter;
+    private $filePath;
 
     public function setUp(): void
     {
-        $this->storage = new FileStorage(sys_get_temp_dir() . '/test_rate_limiter.data');
-        $this->rateLimiter = new SlidingWindowRateLimiter($this->storage, 10, 1);
+        $this->filePath = sys_get_temp_dir() . '/test_rate_limiter.data';
+        $this->rateLimiter = RateLimiterFactory::createRateLimiter(
+            'slidingWindow',
+            'file',
+            [
+                'filePath' =>  $this->filePath,
+            ],
+            10,
+            1
+        );
     }
 
     public function tearDown(): void
     {
-        $this->storage->clear();
+        (new FileStorage($this->filePath))->clear();
     }
 
     public function testAcquireWithinLimit()
